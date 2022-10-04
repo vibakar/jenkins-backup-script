@@ -32,8 +32,14 @@ sudo cp /tmp/jenkins/jenkins.war ${jenkins_war_path}/jenkins.war
 echo "Removing existing plugins directory"
 rm -rf ${jenkins_home}/plugins/**
 
-echo "Copying latest plugins"
-cp -r /tmp/jenkins/updated_plugins/** ${jenkins_home}/plugins/
+# echo "Copying latest plugins"
+# cp -r /tmp/jenkins/updated_plugins/** ${jenkins_home}/plugins/
+
+# Download jenkins-cli.jar
+curl -O http://localhost:8080/jnlpJars/jenkins-cli.jar
+
+# Installing plugins
+java -jar jenkins-cli.jar -s http://localhost:8080 -auth admin:admin install-plugin $(tr '\n' ' ' < ../python_jenkins_plugins/plugins_compatibility.csv)
 
 echo "Restarting Jenkins"
 sudo systemctl restart jenkins
