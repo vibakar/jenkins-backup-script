@@ -29,6 +29,9 @@ cp ${jenkins_war_path}/jenkins.war /tmp/jenkins/${now}/war
 echo "Replacing the old war file with latest"
 sudo cp /tmp/jenkins/jenkins.war ${jenkins_war_path}/jenkins.war
 
+echo "Restarting jenkins"
+systemctl restart jenkins
+
 echo "Removing existing plugins directory"
 rm -rf ${jenkins_home}/plugins/**
 
