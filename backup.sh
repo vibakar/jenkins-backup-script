@@ -39,7 +39,4 @@ rm -rf ${jenkins_home}/plugins/**
 curl -O http://localhost:8080/jnlpJars/jenkins-cli.jar
 
 # Installing plugins
-java -jar jenkins-cli.jar -s http://localhost:8080 -auth admin:admin install-plugin $(tr '\n' ' ' < ../python_jenkins_plugins/plugins_compatibility.csv)
-
-echo "Restarting Jenkins"
-sudo systemctl restart jenkins
+java -jar jenkins-cli.jar -s http://localhost:8080 -auth admin:admin install-plugin $(tr '\n' ' ' < ../python_jenkins_plugins/plugins_compatibility.csv) -restart
