@@ -44,4 +44,4 @@ plugins_list=$(cat plugins_list.txt | tail -n +2 | awk '{print $1}' | tr '\n' ' 
 java -jar jenkins-plugin-manager.jar --war /usr/lib/jenkins.war -d /root/.jenkins/plugins -p ${plugins_list}
 
 echo "Restarting jenkins"
-systemctl restart jenkins
+systemctl restart jenkins 
