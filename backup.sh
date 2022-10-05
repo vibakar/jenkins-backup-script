@@ -32,17 +32,16 @@ sudo cp /tmp/jenkins/jenkins.war ${jenkins_war_path}/jenkins.war
 echo "Restarting jenkins"
 systemctl restart jenkins
 
-echo "Sleep 1 minutes"
+echo "Sleep 1 minute"
 sleep 1m
 
-echo "Removing existing plugins directory"
-rm -rf ${jenkins_home}/plugins/**
+# Download jenkins-plugin-manager.jar
+curl -L https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/2.12.9/jenkins-plugin-manager-2.12.9.jar -o jenkins-plugin-manager.jar
 
-# echo "Copying latest plugins"
-# cp -r /tmp/jenkins/updated_plugins/** ${jenkins_home}/plugins/
+# Install plugins
+java -jar jenkins-plugin-manager.jar --war /usr/lib/jenkins.war -d /root/.jenkins/plugins -l > plugins_list.txt
+plugins_list=$(cat plugins_list.txt | tail -n +2 | awk '{print $1}' | tr '\n' ' ')
+java -jar jenkins-plugin-manager.jar --war /usr/lib/jenkins.war -d /root/.jenkins/plugins -p ${plugins_list}
 
-# Download jenkins-cli.jar
-curl -O http://localhost:8080/jnlpJars/jenkins-cli.jar
-
-# Installing plugins
-java -jar jenkins-cli.jar -s http://localhost:8080 -auth admin:admin install-plugin $(tr '\n' ' ' < ../python_jenkins_plugins/plugins_compatibility.csv) -restart
+echo "Restarting jenkins"
+systemctl restart jenkins
