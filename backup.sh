@@ -32,8 +32,8 @@ sudo cp /tmp/jenkins/jenkins.war ${jenkins_war_path}/jenkins.war
 echo "Restarting jenkins"
 systemctl restart jenkins
 
-echo "Sleep 2 minutes"
-sleep 2m
+echo "Sleep 1 minutes"
+sleep 1m
 
 echo "Removing existing plugins directory"
 rm -rf ${jenkins_home}/plugins/**
