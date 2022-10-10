@@ -43,7 +43,7 @@ update_jenkins_plugins() {
 
     echo "Updating plugins"
     java -jar jenkins-plugin-manager.jar --war ${jenkins_war_path}/jenkins.war -d ${jenkins_home}/plugins -l > plugins_list.txt 2>&1
-    plugins_list=$(cat plugins_list.txt | tail -n +2 | awk '{print $1}' | tr '\n' ' ')
+    plugins_list=$(awk '/Bundled plugins:/{found=0} {if(found) print} /Installed plugins:/{found=1}' plugins_list.txt | cut -d " " -f 1 | tr '\n' ' ')
     java -jar jenkins-plugin-manager.jar --war ${jenkins_war_path}/jenkins.war -d ${jenkins_home}/plugins -p ${plugins_list}
     restart_jenkins
 }
