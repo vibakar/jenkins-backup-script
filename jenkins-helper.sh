@@ -20,13 +20,13 @@ backup_jenkins() {
 }
 
 download_plugin_manager() {
-    echo "Downloading jenkins-plugin-manager.jar"
-    curl -L https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/${jenkins_plugin_manager_version}/jenkins-plugin-manager-${jenkins_plugin_manager_version}.jar -o jenkins-plugin-manager.jar
+    echo "Downloading jenkins-plugin-manager-${jenkins_plugin_manager_version}.jar"
+    curl -L https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/${jenkins_plugin_manager_version}/jenkins-plugin-manager-${jenkins_plugin_manager_version}.jar -o jenkins-plugin-manager-${jenkins_plugin_manager_version}.jar
 }
 
 install_jenkins_plugins() {
     plugins_list=$(cat plugins_installed.txt | tr '\n' ' ')
-    java -jar jenkins-plugin-manager.jar --war ${jenkins_war_path}/jenkins.war -d ${jenkins_home}/plugins -p ${plugins_list}
+    java -jar jenkins-plugin-manager-${jenkins_plugin_manager_version}.jar --war ${jenkins_war_path}/jenkins.war -d ${jenkins_home}/plugins -p ${plugins_list}
 }
 
 restart_jenkins() {
@@ -53,15 +53,15 @@ upgrade_jenkins() {
     curl -L https://get.jenkins.io/war-stable/${jenkins_core_version}/jenkins.war -o ${backup_path}/jenkins.war
 
     echo "Replacing the old war file with latest"
-    sudo cp ${backup_path}/jenkins.war ${jenkins_war_path}/jenkins.war
+    cp ${backup_path}/jenkins.war ${jenkins_war_path}/jenkins.war
 }
 
 update_jenkins_plugins() {
     echo "Updating plugins"
-    java -jar jenkins-plugin-manager.jar --war ${jenkins_war_path}/jenkins.war -d ${jenkins_home}/plugins -l > plugins_list.txt 2>&1
+    java -jar jenkins-plugin-manager-${jenkins_plugin_manager_version}.jar --war ${jenkins_war_path}/jenkins.war -d ${jenkins_home}/plugins -l > plugins_list.txt 2>&1
     awk '/Bundled plugins:/{found=0} {if(found) print} /Installed plugins:/{found=1}' plugins_list.txt | cut -d " " -f 1 > plugins_installed.txt
     plugins_list=$(cat plugins_installed.txt | tr '\n' ' ')
-    java -jar jenkins-plugin-manager.jar --war ${jenkins_war_path}/jenkins.war -d ${jenkins_home}/plugins -p ${plugins_list}
+    java -jar jenkins-plugin-manager-${jenkins_plugin_manager_version}.jar --war ${jenkins_war_path}/jenkins.war -d ${jenkins_home}/plugins -p ${plugins_list}
 }
 
 usage() {
