@@ -117,7 +117,7 @@ restore_jenkins() {
     cp ${backup_path}/${1}/war/jenkins.war ${jenkins_war_path}/jenkins.war
 }
 
-upgarde_jenkins() {
+upgrade_jenkins() {
     upgrade_jenkins_from_war
 }
 
@@ -138,7 +138,7 @@ upgrade_jenkins_from_war() {
 }
 
 usage() {
-    echo -e "${0} [all|backup|install_plugins JENKINS_VERSION|restore BACKUP_ID|upgrade JENKINS_VERSION]"
+    echo -e "${0} [all JENKINS_VERSION|backup|install_plugins JENKINS_VERSION|restore BACKUP_ID|upgrade JENKINS_VERSION]"
 }
 
 case ${1} in
